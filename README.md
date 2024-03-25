@@ -19,7 +19,7 @@ fn main() {
     println!("enum: {:#?}", DeviceTypeEnum::from_code(1));
     println!("code: {:#?}", DeviceTypeEnum::PC.to_code());
     println!("desc: {:#?}", DeviceTypeEnum::PC.get_desc());
-    println!("desc2: {:#?}", DeviceTypeEnum::get_desc2(3));
+    println!("desc: {:#?}", DeviceTypeEnum::got_desc(3));
 }
 ```
 
@@ -60,7 +60,7 @@ impl DeviceTypeEnum {
             _ => None,
         }
     }
-    pub fn get_desc2(code: i16) -> &'static str {
+    pub fn got_desc(code: i16) -> &'static str {
         match Self::from_code(code) {
             Some(Self::PHONE) => "mobile phone",
             Some(Self::PC) => "host computer",

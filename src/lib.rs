@@ -18,7 +18,7 @@ fn do_expand(derive_input: &DeriveInput) -> syn::Result<proc_macro2::TokenStream
     let get_code_ts = gen_get_code_token_stream(&enum_info_vec)?;
     let get_from_ts = gen_from_code_token_stream(&enum_info_vec)?;
     let get_desc_ts = gen_get_desc_token_stream(&enum_info_vec)?;
-    let get_desc2_ts = gen_get_desc2_token_stream(&enum_info_vec)?;
+    let got_desc_ts = gen_got_desc_token_stream(&enum_info_vec)?;
 
     let token_stream_res = quote!(
        impl #ident {
@@ -28,7 +28,7 @@ fn do_expand(derive_input: &DeriveInput) -> syn::Result<proc_macro2::TokenStream
 
             #get_from_ts
 
-            #get_desc2_ts
+            #got_desc_ts
         }
     );
     Ok(token_stream_res)
@@ -99,27 +99,6 @@ fn gen_get_code_token_stream(
     Ok(res)
 }
 
-fn gen_get_desc_token_stream(
-    enum_info_vec: &Vec<(syn::Ident, syn::LitInt, proc_macro2::Literal)>,
-) -> syn::Result<proc_macro2::TokenStream> {
-    let mut token_streams = Vec::new();
-    for (field, _val, desc) in enum_info_vec.iter() {
-        token_streams.push(quote!(
-             Self::#field => #desc,
-        ));
-    }
-
-    let res = quote!(
-        #[inline]
-        pub fn get_desc(&self) -> &'static str {
-            match self {
-                #(#token_streams)*
-            }
-        }
-    );
-    Ok(res)
-}
-
 fn gen_from_code_token_stream(
     enum_info_vec: &Vec<(syn::Ident, syn::LitInt, proc_macro2::Literal)>,
 ) -> syn::Result<proc_macro2::TokenStream> {
@@ -141,7 +120,7 @@ fn gen_from_code_token_stream(
     Ok(res)
 }
 
-fn gen_get_desc2_token_stream(
+fn gen_got_desc_token_stream(
     enum_info_vec: &Vec<(syn::Ident, syn::LitInt, proc_macro2::Literal)>,
 ) -> syn::Result<proc_macro2::TokenStream> {
     let mut token_streams = Vec::new();
@@ -152,10 +131,31 @@ fn gen_get_desc2_token_stream(
     }
 
     let res = quote!(
-        pub fn get_desc2(code: i16) -> &'static str {
+        pub fn got_desc(code: i16) -> &'static str {
             match Self::from_code(code) {
                  #(#token_streams)*
                 None => "",
+            }
+        }
+    );
+    Ok(res)
+}
+
+fn gen_get_desc_token_stream(
+    enum_info_vec: &Vec<(syn::Ident, syn::LitInt, proc_macro2::Literal)>,
+) -> syn::Result<proc_macro2::TokenStream> {
+    let mut token_streams = Vec::new();
+    for (field, _val, desc) in enum_info_vec.iter() {
+        token_streams.push(quote!(
+             Self::#field => #desc,
+        ));
+    }
+
+    let res = quote!(
+        #[inline]
+        pub fn get_desc(&self) -> &'static str {
+            match self {
+                #(#token_streams)*
             }
         }
     );

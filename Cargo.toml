@@ -1,6 +1,6 @@
 [package]
 name = "enum_desc"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["WanpengHui<hwpok@163.com>"]
 description = "This is a derived macro for adding descriptive information to an enumeration"
 license = "MIT"
