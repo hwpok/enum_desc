@@ -3,6 +3,7 @@ name = "enum_desc"
 version = "0.1.1"
 authors = ["WanpengHui<hwpok@163.com>"]
 description = "This is a derived macro for adding descriptive information to an enumeration"
+repository = "https://github.com/hwpok/enum_desc"
 license = "MIT"
 edition = "2021"
 
