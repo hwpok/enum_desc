@@ -1,4 +1,5 @@
 use enum_desc::EnumDesc;
+
 #[derive(EnumDesc, Debug)]
 pub enum DeviceTypeEnum {
     #[info(desc = "mobile phone")]
