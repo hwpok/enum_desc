@@ -53,13 +53,13 @@ fn gen_get_desc_ts(enum_info_vec: &Vec<EnumInfo>) -> syn::Result<proc_macro2::To
     let mut token_streams = Vec::new();
     for EnumInfo { var, desc, .. } in enum_info_vec.iter() {
         token_streams.push(quote::quote!(
-             Self::#var => #desc,
+             Self::#var => #desc.to_string(),
         ));
     }
 
     let res = quote::quote!(
         #[inline]
-        pub fn get_desc(&self) -> &'static str {
+        pub fn get_desc(&self) -> String {
             match self {
                 #(#token_streams)*
             }
@@ -91,15 +91,15 @@ fn gen_got_desc_ts(enum_info_vec: &Vec<EnumInfo>) -> syn::Result<proc_macro2::To
     let mut token_streams = Vec::new();
     for EnumInfo { var, desc, .. } in enum_info_vec.iter() {
         token_streams.push(quote::quote!(
-           Some(Self::#var) => #desc,
+           Some(Self::#var) => #desc.to_string(),
         ));
     }
 
     let res = quote::quote!(
-        pub fn got_desc(code: i16) -> &'static str {
+        pub fn got_desc(code: i16) -> String {
             match Self::from_code(code) {
                  #(#token_streams)*
-                None => "",
+                None => "".to_string(),
             }
         }
     );

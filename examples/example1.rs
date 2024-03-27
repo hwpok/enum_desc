@@ -16,5 +16,5 @@ fn main() {
     println!("enum: {:#?}", DeviceTypeEnum::from_code(1));
     println!("code: {:#?}", DeviceTypeEnum::PC.to_code());
     println!("desc: {:#?}", DeviceTypeEnum::PC.get_desc());
-    println!("desc2: {:#?}", DeviceTypeEnum::got_desc(3));
+    println!("desc: {:#?}", DeviceTypeEnum::got_desc(3));
 }

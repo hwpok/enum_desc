@@ -1,9 +1,10 @@
-## ENUM_DESC
+## ENUM_DESC & ENUM_TRS
 ```
-This is a derived macro for adding descriptive information to an enumeration
+EnumDesc: This is a derived macro for adding descriptive information to an enumeration
+EnumTrs: This attribute macro is used to translate enum fields in data transfer objects.
 ```
 
-## EXAMPLE
+## EXAMPLE - EnumDesc
 ```
 #[derive(EnumDesc, Debug)]
 pub enum DeviceTypeEnum {
@@ -21,55 +22,72 @@ fn main() {
     println!("desc: {:#?}", DeviceTypeEnum::PC.get_desc());
     println!("desc: {:#?}", DeviceTypeEnum::got_desc(3));
 }
+
+============================================================
+will print: 
+    enum: Some(
+        PHONE,
+    )
+    code: 2
+    desc: "host computer"
+    desc: "tablet"
 ```
 
-## INSTRUCTION
+## EXAMPLE - enum_trs
 ```
-#[derive(EnumDesc, Debug)]
-pub enum DeviceTypeEnum {
-    #[info(desc = "mobile phone")]
-    PHONE = 1,
-    #[info(desc = "host computer")]
-    PC = 2,
-    #[info(desc = "tablet")]
-    PAD = 3,
+use macro_lib::{enum_trs, EnumDesc};
+
+#[derive(Debug, EnumDesc)]
+pub enum GenderEnum {
+    #[info(desc = "male")]
+    MALE = 0,
+    #[info(desc = "female")]
+    FEMALE = 1,
 }
 
-The EnumDesc derived macro will automatically implement the following functions for DeviceTypeEnum:
-impl DeviceTypeEnum {
-    pub fn to_code(&self) -> i16 {
-        match self {
-            Self::PHONE => 1,
-            Self::PC => 2,
-            Self::PAD => 3,
-        }
-    }
-    #[inline]
-    pub fn get_desc(&self) -> &'static str {
-        match self {
-            Self::PHONE => "mobile phone",
-            Self::PC => "host computer",
-            Self::PAD => "tablet",
-        }
-    }
-    pub fn from_code(code: i16) -> Option<Self> {
-        match code {
-            1 => Some(Self::PHONE),
-            2 => Some(Self::PC),
-            3 => Some(Self::PAD),
-            _ => None,
-        }
-    }
-    pub fn got_desc(code: i16) -> &'static str {
-        match Self::from_code(code) {
-            Some(Self::PHONE) => "mobile phone",
-            Some(Self::PC) => "host computer",
-            Some(Self::PAD) => "tablet",
-            None => "",
-        }
-    }
+#[derive(Debug, EnumDesc)]
+pub enum StatusEnum {
+    #[info(desc = "normal")]
+    NORMAL = 1,
+
+    #[info(desc = "locked")]
+    LOCKED = 0,
 }
 
+#[enum_trs(
+gender = GenderEnum,
+status = StatusEnum,
+)]
+#[derive(Debug)]
+pub struct UserDto {
+    pub name: String,
+    pub gender: i16,
+    pub status: Option<i16>,
+}
+
+fn main() {
+    let mut user_dto = UserDto {
+        name: "hui".to_string(),
+        gender: 1i16,
+        status: Some(1i16),
+        gender_desc: "".to_string(),
+        status_desc: "".to_string(),
+    };
+    user_dto.translate_enums();
+    println!("{:#?}", user_dto);
+}
+
+============================================================
+will print: 
+UserDto {
+    name: "hui",
+    gender: 1,
+    status: Some(
+        1,
+    ),
+    gender_desc: "female",
+    status_desc: "normal",
+}
 
 ```
 
