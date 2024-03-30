@@ -1,8 +1,6 @@
 use crate::enum_desc::enum_desc_expand::enum_desc_expand;
 use crate::enum_trs::enum_trs_expand::enum_trs_expand;
 use proc_macro::TokenStream;
-use quote::ToTokens;
-use syn::spanned::Spanned;
 
 mod enum_desc;
 mod enum_trs;
