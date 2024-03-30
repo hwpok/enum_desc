@@ -2,7 +2,7 @@ use crate::enum_trs::trs_info::TrsInfo;
 use proc_macro::TokenStream;
 use syn::{parse_macro_input, DeriveInput, ItemStruct};
 
-pub fn enum_trs_expand(attr: TokenStream, input: TokenStream) -> TokenStream {
+pub(crate) fn enum_trs_expand(attr: TokenStream, input: TokenStream) -> TokenStream {
     let input_copy = input.clone();
     let mut derive_input = parse_macro_input!(input_copy as DeriveInput);
     let item_struct = parse_macro_input!(input as ItemStruct);

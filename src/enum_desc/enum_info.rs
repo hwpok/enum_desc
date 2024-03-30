@@ -1,12 +1,12 @@
 #[derive(Debug)]
-pub struct EnumInfo {
+pub(crate) struct EnumInfo {
     pub var: syn::Ident,
     pub value: syn::LitInt,
     pub desc: proc_macro2::Literal,
 }
 
 impl EnumInfo {
-    pub fn get_enum_ident(item: &syn::Item) -> syn::Result<syn::Ident> {
+    pub(crate) fn get_enum_ident(item: &syn::Item) -> syn::Result<syn::Ident> {
         if let syn::Item::Enum(item_enum) = item {
             return Ok(item_enum.ident.clone());
         }
@@ -15,7 +15,7 @@ impl EnumInfo {
             "Expected enum",
         ))
     }
-    pub fn parse(item: &syn::Item) -> syn::Result<Vec<EnumInfo>> {
+    pub(crate) fn parse(item: &syn::Item) -> syn::Result<Vec<EnumInfo>> {
         if let syn::Item::Enum(item_enum) = item {
             let mut enum_infos = Vec::new();
             for (idx, variant) in item_enum.variants.iter().enumerate() {

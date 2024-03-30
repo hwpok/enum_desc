@@ -1,7 +1,7 @@
 use crate::enum_desc::enum_info::EnumInfo;
 use proc_macro::TokenStream;
 
-pub fn enum_desc_expand(input: TokenStream) -> TokenStream {
+pub(crate) fn enum_desc_expand(input: TokenStream) -> TokenStream {
     let item = syn::parse_macro_input!(input as syn::Item);
     match do_expand(&item) {
         Ok(token_stream) => token_stream.into(),

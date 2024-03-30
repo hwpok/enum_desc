@@ -1,2 +1,2 @@
-pub mod enum_desc_expand;
-pub mod enum_info;
+pub(crate) mod enum_desc_expand;
+pub(crate) mod enum_info;

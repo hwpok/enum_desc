@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use syn::ItemStruct;
 
 #[derive(Debug)]
-pub struct TrsInfo {
+pub(crate) struct TrsInfo {
     pub field: syn::Ident,
     pub field_generic: bool,
     pub des_field: syn::Field,
@@ -10,7 +10,7 @@ pub struct TrsInfo {
 }
 
 impl TrsInfo {
-    pub fn parse(derive_input: &ItemStruct, attr: String) -> syn::Result<Vec<TrsInfo>> {
+    pub(crate) fn parse(derive_input: &ItemStruct, attr: String) -> syn::Result<Vec<TrsInfo>> {
         let field_enum_entry_map: HashMap<_, _> = attr
             .split(',')
             .filter(|s| !s.trim().is_empty())

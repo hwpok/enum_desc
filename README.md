@@ -1,11 +1,10 @@
 ## ENUM_DESC & ENUM_TRS
-```
-EnumDesc: This is a derived macro for adding descriptive information to an enumeration
-EnumTrs: This attribute macro is used to translate enum fields in data transfer objects.
-```
+Two derived macros, EnumDesc and EnumTrs, are provided to add descriptive information to enumerations and translate enumeration codes
+
 
 ## EXAMPLE - EnumDesc
-```
+Add descriptive information to enumerations
+```rust
 #[derive(EnumDesc, Debug)]
 pub enum DeviceTypeEnum {
     #[info(desc = "mobile phone")]
@@ -22,19 +21,16 @@ fn main() {
     println!("desc: {:#?}", DeviceTypeEnum::PC.get_desc());
     println!("desc: {:#?}", DeviceTypeEnum::got_desc(3));
 }
-
-============================================================
-will print: 
-    enum: Some(
-        PHONE,
-    )
-    code: 2
-    desc: "host computer"
-    desc: "tablet"
 ```
+Run the code above, and you will see the following information:  
+&nbsp;&nbsp;&nbsp;&nbsp;  enum: Some(PHONE)  
+&nbsp;&nbsp;&nbsp;&nbsp;  code: 2  
+&nbsp;&nbsp;&nbsp;&nbsp;  desc: "host computer"  
+&nbsp;&nbsp;&nbsp;&nbsp;  desc: "tablet"  
 
 ## EXAMPLE - enum_trs
-```
+Translate enumeration codes
+```rust
 use macro_lib::{enum_trs, EnumDesc};
 
 #[derive(Debug, EnumDesc)]
@@ -76,19 +72,18 @@ fn main() {
     user_dto.translate_enums();
     println!("{:#?}", user_dto);
 }
+```
 
-============================================================
-will print: 
-UserDto {
-    name: "hui",
-    gender: 1,
-    status: Some(
-        1,
-    ),
-    gender_desc: "female",
-    status_desc: "normal",
-}
-
+Run the code above, and you will see the following information:    
+&nbsp;&nbsp;&nbsp;&nbsp;  UserDto {  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      name: "hui",  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  gender: 1,  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  status: Some(  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  1,  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  ),  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  gender_desc: "female",  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  status_desc: "normal",  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  }
 ```
 
 
