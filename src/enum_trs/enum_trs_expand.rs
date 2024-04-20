@@ -1,6 +1,7 @@
 use crate::enum_trs::trs_info::TrsInfo;
 use proc_macro::TokenStream;
 use syn::{parse_macro_input, DeriveInput, ItemStruct};
+use syn::spanned::Spanned;
 
 pub(crate) fn enum_trs_expand(attr: TokenStream, input: TokenStream) -> TokenStream {
     let input_copy = input.clone();
@@ -68,6 +69,7 @@ fn build_desc_field_setting_ts(trs_info_vec: &Vec<TrsInfo>) -> Vec<proc_macro2::
     for TrsInfo {
         field,
         field_generic,
+        bit_flag,
         des_field,
         des_enum,
     } in trs_info_vec.iter()
@@ -86,14 +88,21 @@ fn build_desc_field_setting_ts(trs_info_vec: &Vec<TrsInfo>) -> Vec<proc_macro2::
             }
         }
 
+        // build translate function
+        let translate_fn = if *bit_flag {
+            syn::Ident::new("get_desc_from_bitflag", des_field.span())
+        } else {
+            syn::Ident::new("get_desc_from_code", des_field.span())
+        };
+
         // set desc field's value
         if *field_generic {
             init_item_ts_vec.push(quote::quote!(
-              self.#desc_field_ident = self.#field.map_or_else(|| String::new(), |#field|  #path_idents::got_desc(#field));
+              self.#desc_field_ident = self.#field.map_or_else(|| String::new(), |#field|  #path_idents::#translate_fn(#field));
             ));
         } else {
             init_item_ts_vec.push(quote::quote!(
-              self.#desc_field_ident = #path_idents::got_desc(self.#field);
+              self.#desc_field_ident = #path_idents::#translate_fn(self.#field);
             ));
         }
     }

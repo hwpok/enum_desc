@@ -1,5 +1,8 @@
 ## ENUM_DESC & ENUM_TRS
-Two derived macros, EnumDesc and EnumTrs, are provided to add descriptive information to enumerations and translate enumeration codes
+A set of column-derived macros is provided to add descriptive information to enumerations and facilitate the translation of enumeration codes.   
+Specifically, the following macros serve to augment enums with additional functionality:
+"EnumDesc", "EnumDescI8", "EnumDescU8", "EnumDescI16", "EnumDescU16", "EnumDescI32", "EnumDescU32", "EnumDescI64", "EnumDescU64", "EnumDescISize", "EnumDescUSize"  
+The enum_trs attribute macro, on the other hand, enables the translation of values, supporting both "equivalent translation" and "flag translation."
 
 
 ## EXAMPLE - EnumDesc
@@ -31,8 +34,7 @@ Run the code above, and you will see the following information:
 ## EXAMPLE - enum_trs
 Translate enumeration codes
 ```rust
-use macro_lib::{enum_trs, EnumDesc};
-
+/// Ordinary Enumeration
 #[derive(Debug, EnumDesc)]
 pub enum GenderEnum {
     #[info(desc = "male")]
@@ -41,33 +43,39 @@ pub enum GenderEnum {
     FEMALE = 1,
 }
 
-#[derive(Debug, EnumDesc)]
-pub enum StatusEnum {
-    #[info(desc = "normal")]
-    NORMAL = 1,
+/// Flagged Bit Enumeration, 
+#[derive(Debug, EnumDescU8)]
+pub enum AllowDeviceTypeEnum {
+    #[info(desc = "mobile phone")]
+    PHONE = 1,
 
-    #[info(desc = "locked")]
-    LOCKED = 0,
+    #[info(desc = "host computer")]
+    PC = 2,
+
+    #[info(desc = "tablet")]
+    PAD = 4,
 }
 
+/// "=" is used for equivalent translation
+/// "&"  is used for flag bit translation.
 #[enum_trs(
 gender = GenderEnum,
-status = StatusEnum,
+allow_device_type & AllowDeviceTypeEnum,
 )]
 #[derive(Debug)]
 pub struct UserDto {
     pub name: String,
     pub gender: i16,
-    pub status: Option<i16>,
+    pub allow_device_type: Option<u8>,
 }
 
 fn main() {
     let mut user_dto = UserDto {
         name: "hui".to_string(),
         gender: 1i16,
-        status: Some(1i16),
+        allow_device_type: Some(7u8),
         gender_desc: "".to_string(),
-        status_desc: "".to_string(),
+        allow_device_type_desc: "".to_string(),
     };
     user_dto.translate_enums();
     println!("{:#?}", user_dto);
@@ -78,12 +86,12 @@ Run the code above, and you will see the following information:
 &nbsp;&nbsp;&nbsp;&nbsp;  UserDto {  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      name: "hui",  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  gender: 1,  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  status: Some(  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  1,  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  allow_device_type: Some(  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  7,  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  ),  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  gender_desc: "female",  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  status_desc: "normal",  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; allow_device_type_desc: "mobile phone | host computer | tablet",  
+&nbsp;&nbsp;&nbsp;&nbsp; }
 ```
 
 

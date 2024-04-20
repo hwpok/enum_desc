@@ -1,8 +1,8 @@
 [package]
 name = "enum_desc"
-version = "0.1.4"
+version = "0.1.5"
 authors = ["WanpengHui<hwpok@163.com>"]
-description = "Two derived macros, EnumDesc and EnumTrs, are provided to add descriptive information to enumerations and translate enumeration codes"
+description = "A set of column-derived macros is provided to add descriptive information to enumerations and translate enumeration codes"
 repository = "https://github.com/hwpok/enum_desc"
 license = "MIT"
 edition = "2021"
